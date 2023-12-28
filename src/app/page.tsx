@@ -1,6 +1,6 @@
 "use client";
 import { ThemeOptions, ThemeProvider, createTheme } from "@mui/material/styles";
-import { createContext, useMemo, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { FormulaBar } from "./components/formula-bar/FormulaBar";
 import { Ribbon } from "./components/ribbon/Ribbon";
 import { Sheet } from "./components/sheet/Sheet";
@@ -8,6 +8,7 @@ import { SheetsBar } from "./components/sheets-bar/SheetsBar";
 import { TitleBar } from "./components/title-bar/TitleBar";
 import { themes } from "./theme";
 import { MetaDataType, SheetContextInterface } from "./type";
+import { getData } from "./api";
 
 //table data -> WeakMap()
 //zoom in/out
@@ -47,6 +48,10 @@ export default function Home() {
   );
 
   const theme = useMemo(() => createTheme(mode), [mode]);
+
+  useEffect(()=>{
+    getData();
+  })
 
   return (
     <MUIWrapperContext.Provider
