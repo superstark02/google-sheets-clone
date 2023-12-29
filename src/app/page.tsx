@@ -1,6 +1,7 @@
 "use client";
 import { ThemeOptions, ThemeProvider, createTheme } from "@mui/material/styles";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createContext, useMemo, useState } from "react";
 import { FormulaBar } from "./components/formula-bar/FormulaBar";
 import { Ribbon } from "./components/ribbon/Ribbon";
 import { Sheet } from "./components/sheet/Sheet";
@@ -8,12 +9,13 @@ import { SheetsBar } from "./components/sheets-bar/SheetsBar";
 import { TitleBar } from "./components/title-bar/TitleBar";
 import { themes } from "./theme";
 import { MetaDataType, SheetContextInterface } from "./type";
-import { getData } from "./api";
 
 //table data -> WeakMap()
 //zoom in/out
 //select multiple
 //sheets bar
+
+const queryClient = new QueryClient();
 
 export const MUIWrapperContext = createContext<SheetContextInterface>({
   toggleColorMode: () => {},
@@ -49,31 +51,29 @@ export default function Home() {
 
   const theme = useMemo(() => createTheme(mode), [mode]);
 
-  useEffect(()=>{
-    getData();
-  })
-
   return (
-    <MUIWrapperContext.Provider
-      value={{
-        ...muiWrapperUtils,
-        cellHeight: "25px",
-        fontSize: "10px",
-        selectedCell,
-        setSelectedCell,
-        metaData,
-        setMetaData,
-      }}
-    >
-      <ThemeProvider theme={theme}>
-        <main>
-          <TitleBar />
-          <Ribbon />
-          <FormulaBar />
-          <Sheet />
-          <SheetsBar />
-        </main>
-      </ThemeProvider>
-    </MUIWrapperContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <MUIWrapperContext.Provider
+        value={{
+          ...muiWrapperUtils,
+          cellHeight: "25px",
+          fontSize: "10px",
+          selectedCell,
+          setSelectedCell,
+          metaData,
+          setMetaData,
+        }}
+      >
+        <ThemeProvider theme={theme}>
+          <main>
+            <TitleBar />
+            <Ribbon />
+            <FormulaBar />
+            <Sheet />
+            <SheetsBar />
+          </main>
+        </ThemeProvider>
+      </MUIWrapperContext.Provider>
+    </QueryClientProvider>
   );
 }

@@ -12,3 +12,12 @@ export type SheetContextInterface = {
   metaData: MetaDataType;
   setMetaData: (args: any) => void;
 };
+
+export type SheetCell = {
+  Data: string;
+  Bold: boolean;
+  Color: string;
+  Id: number;
+  X: number;
+  Y: number;
+}

@@ -1,18 +1,56 @@
-import React, { useCallback, useContext, useEffect, useMemo } from "react";
-import { Row } from "./components/Rows";
-import { Typography, useTheme } from "@mui/material";
-import { Column } from "./components/Column";
 import { MUIWrapperContext } from "@/app/page";
 import { generateId, inRange } from "@/app/utils";
+import { Typography, useTheme } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback, useContext, useEffect, useMemo } from "react";
+import { Column } from "./components/Column";
+import { Row } from "./components/Rows";
+import { GET_ALL_DATA, getAllData } from "@/app/api";
+import { SheetCell } from "@/app/type";
 
 export const Sheet = () => {
+  //context
   const { fontSize, selectedCell, setSelectedCell, metaData, setMetaData } =
     useContext(MUIWrapperContext);
+
+  //theme
   const theme = useTheme();
 
-  const cache = useMemo(() => {
-    return Array(100).fill(Array(26).fill("")); //add BE
-  }, []);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: [GET_ALL_DATA],
+    queryFn: getAllData,
+  });
+
+  const resData: SheetCell[] = data as any;
+
+  //create sheet
+  const cache: Array<Array<SheetCell>> = useMemo(() => {
+    if (isLoading) {
+      return [[]];
+    }
+
+    //creating sheet
+    const sheet = Array(10).fill(
+      Array(10).fill({
+        Data: "",
+        Bold: false,
+        Color: "",
+        Id: "",
+      })
+    );
+
+    //filling data if any
+    resData?.forEach((item) => {
+      const { X, Y, Data, Bold, Color, Id } = item;
+      sheet[X][Y] = {
+        Data,
+        Bold,
+        Color,
+        Id,
+      };
+    });
+    return sheet;
+  }, [resData, isLoading, isError]);
 
   const keyBordEvents = useCallback(
     (e: any) => {
@@ -44,7 +82,7 @@ export const Sheet = () => {
           )
         ) {
           const element = window?.document?.getElementById(
-            generateId(newPosition[0], newPosition[1])
+            String(generateId(newPosition[0], newPosition[1]))
           );
           element?.focus();
           return newPosition;
@@ -57,7 +95,7 @@ export const Sheet = () => {
   );
 
   const select = (e: any) => {
-    console.log(e);
+    //console.log(e);
   };
 
   useEffect(() => {
@@ -66,6 +104,10 @@ export const Sheet = () => {
       colLength: cache[0].length,
     });
   }, [cache]);
+
+  if(isLoading){
+    return 'Loading...'
+  }
 
   return (
     <section>

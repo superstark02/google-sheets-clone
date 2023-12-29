@@ -1,5 +1,15 @@
+const cantorPairing = (n: number, m: number) => {
+  //Cantor pairing
+  return ((n + m) * (n + m + 1)) / 2 + m;
+  // ((-m)*2)/((n+m)*n+m+1)
+};
+
 export const generateId = (x: number, y: number) => {
-  return `${x},${y}`;
+  return cantorPairing(x, y);
+};
+
+export const generateInputId = (x: number, y: number) => {
+  return `input-${x},${y}`;
 };
 
 export const inRange = (
