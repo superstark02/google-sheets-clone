@@ -1,38 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Google Sheets Clone
 
-## Getting Started
+### Run Project
 
-First, run the development server:
+Front End (https://github.com/superstark02/google-sheets-clone.git):
+
+Front-end is built on NextJS framework, for API calls [TanStack Query](https://tanstack.com/) is used.
 
 ```bash
+git clone https://github.com/superstark02/google-sheets-clone.git
+
+cd google-sheets-clone
+
+npm i
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+
+Back End (https://github.com/superstark02/google-sheets-clone-be.git):
+
+
+
+```bash
+git clone https://github.com/superstark02/google-sheets-clone-be.git
+
+cd google-sheets-clone-be
+
+go run .
+```
+
+Make sure that [MySQL](https://www.mysql.com/downloads/) installed and run MySQL server on port [localhost:3306 ](http://localhost:3306) and replace your MySQL password in **mongodb.go**
+
+![alt text](./db_password.png)
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## The UI looks like this
+![alt text](./ui.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Here is the basic schema of the database
+![alt text](./schema.png)
 
-## Learn More
+![alt text](./struct.png)
 
-To learn more about Next.js, take a look at the following resources:
+To generate ID for each row **Cantor Pairing** was used. This function generates a unique ID from two given number i.e. X,Y coordinates in this case.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# google-sheets-clone
-# google-sheets-clone
+```javascript
+//Cantor pairing function
+const cantorPairing = (n: number, m: number) => {
+  return ((n + m) * (n + m + 1)) / 2 + m;
+};
+```
