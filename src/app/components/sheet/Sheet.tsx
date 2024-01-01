@@ -30,24 +30,26 @@ export const Sheet = () => {
     }
 
     //creating sheet
-    const sheet = Array(10).fill(
-      Array(10).fill({
-        Data: "",
-        Bold: false,
-        Color: "",
-        Id: "",
-      })
+    const sheet = new Array(100).fill(null).map((_) =>
+      new Array(26).fill(
+        new Object({
+          Data: "",
+          Bold: false,
+          Color: "",
+          Id: "",
+        })
+      )
     );
 
     //filling data if any
     resData?.forEach((item) => {
       const { X, Y, Data, Bold, Color, Id } = item;
-      sheet[X][Y] = {
+      sheet[X][Y] = new Object({
         Data,
         Bold,
         Color,
         Id,
-      };
+      });
     });
     return sheet;
   }, [resData, isLoading, isError]);
@@ -105,8 +107,8 @@ export const Sheet = () => {
     });
   }, [cache]);
 
-  if(isLoading){
-    return 'Loading...'
+  if (isLoading) {
+    return "Loading...";
   }
 
   return (

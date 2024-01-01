@@ -26,7 +26,7 @@ export const Cell = (props: {
         }
         e.preventDefault();
       }}
-      defaultValue={cellData.Data}
+      defaultValue={cellData.Id}
     />
   );
 };
